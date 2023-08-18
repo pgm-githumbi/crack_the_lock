@@ -29,7 +29,10 @@ def generateRandomProblem(code_len:'int', alphabet:'list'=ALPHABET_DEFAULT,
     _vertical_corr_hint = _generate_vertical_corr_hint(code, hint_count)
     _vertical_corr_placed_hint = _generate_corr_placed_hints(code, _vertical_corr_hint)
 
-    return _fill_up_problem(code, _vertical_corr_hint, _vertical_corr_placed_hint, alphabet)
+    problem = _fill_up_problem(code, _vertical_corr_hint,
+                                _vertical_corr_placed_hint, alphabet)
+    problem.code_alphabet = alphabet
+    return problem
     
 
 DIFFICULTY_FACTOR_CORR: 'int' = 1.5 # The higher the easier, mininum is 1.0
