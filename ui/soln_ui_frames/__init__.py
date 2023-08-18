@@ -1,6 +1,6 @@
 import os
 import sys
-print(f'in __init__.py in tests directory')
+print(f'in __init__.py in ui directory')
 
 
 
