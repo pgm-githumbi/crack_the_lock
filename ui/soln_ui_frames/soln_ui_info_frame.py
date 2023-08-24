@@ -12,8 +12,9 @@ import ui.solution_ui
 
 @dataclasses.dataclass
 class _Config:
-    lb_problem_info_font = 'Arial 10'
-    lb_problem_info_text = """Crack the lock.
+    lb_problem_info_font = 'Arial 17'
+    lb_problem_info_text = """Crack the lock.\nUse the hints to find the password
+                            to unlock the lock.
                            """
 
 @dataclasses.dataclass
@@ -37,12 +38,15 @@ def create_info_frame(widgets:'ui.solution_ui._Widgets',master:'tk.Frame'):
     local_widgets.fr_info = tk.Frame(master)
     
     
-    local_widgets.lb_problem_info = ttk.Label(local_widgets.fr_info,
-                                        text=local_widgets.config.lb_problem_info_text,
-                                        anchor='w', 
-                                        font=local_widgets.config.lb_problem_info_font,
-                                        justify='left')
-    local_widgets.lb_problem_info.pack(side='left', fill='x', expand=True)
+    local_widgets.lb_problem_info = tk.Label(
+        local_widgets.fr_info,
+        text=local_widgets.config.lb_problem_info_text,
+        anchor='w', 
+        font=local_widgets.config.lb_problem_info_font,
+        justify='center',
+        bg="yellow"
+    )
+    local_widgets.lb_problem_info.pack(side=tk.TOP, anchor=tk.CENTER)
 
     return local_widgets.fr_info
 
