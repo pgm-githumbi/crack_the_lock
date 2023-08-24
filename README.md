@@ -18,7 +18,6 @@ I learned alot of GUI stuff while using tkinter to render the problem.
 **Allows users to specify a different problem to solve.**
 
 ![Screenshot showing user changing problem](assets/images/Screenshot6.jpg)
-![Screenshot new problem](assets/images/Screenshot7.jpg)
 
 **Allows users to see the correct answer if they failed to solve the problem.**
 
