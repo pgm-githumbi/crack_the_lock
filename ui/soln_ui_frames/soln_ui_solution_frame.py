@@ -8,7 +8,9 @@ import ui.solution_ui
 @dataclass
 class _Config:
     width_square:'int' = 50
-    width_rule:'int' = 360
+    width_rule:'int' = 460
+    offset_x:'int' = 10
+    offset_y:'int' = 10
 
 
 @dataclass
@@ -33,43 +35,33 @@ def create_solution_frame(widgets:'ui.solution_ui._Widgets'):
 
     local_widgets.canv_solution = tk.Canvas(local_widgets.fr_solution_frame)
     local_widgets.canv_solution.configure(bg='yellow')
-
     local_widgets.canv_solution.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-    local_widgets.hbar_solution = tk.Scrollbar(local_widgets.canv_solution,
-                                                orient='horizontal')
-    local_widgets.hbar_solution.pack(side='bottom', fill='x')
-    local_widgets.hbar_solution.config(command=local_widgets.canv_solution.xview)
-
-    local_widgets.vbar_solution = tk.Scrollbar(local_widgets.canv_solution,
-                                                orient='vertical')
-    local_widgets.vbar_solution.pack(side='right', fill='y')
-    local_widgets.vbar_solution.config(command=local_widgets.canv_solution.yview)
-
-    local_widgets.canv_solution.config(yscrollcommand=local_widgets.vbar_solution.set, 
-                                        xscrollcommand=local_widgets.hbar_solution.set)
-
+    
     rows = len(widgets.data_problem.grid) 
     columns = len(widgets.data_problem.grid[0]) - 1 # Last column is a rule
+    offset_x = local_widgets.config.offset_x
+    offset_y = local_widgets.config.offset_y
     for row in range(rows):
         for col in range(columns):
-            x0 = col * local_widgets.config.width_square
-            y0 = row * local_widgets.config.width_square
+            x0 = (col * local_widgets.config.width_square) + offset_x
+            y0 = (row * local_widgets.config.width_square) + offset_y
             x1 = x0 + local_widgets.config.width_square
             y1 = y0 + local_widgets.config.width_square
             _create_soln_rects_and_text(widgets, local_widgets, x0, y0,
                                          x1, y1, row, col)
     
     for row in range(rows): # Make the last column wider than the previous ones
-        x0 = columns * local_widgets.config.width_square
-        y0 = row * local_widgets.config.width_square
+        x0 = (columns * local_widgets.config.width_square) + offset_x
+        y0 = (row * local_widgets.config.width_square) + offset_y
         x1 = x0 + local_widgets.config.width_rule
         y1 = y0 + local_widgets.config.width_square
         _create_soln_rects_and_text(widgets, local_widgets, x0, y0, 
                                     x1, y1, row, columns)
 
     local_widgets.canv_solution.update_idletasks()
-    local_widgets.canv_solution.config(scrollregion=local_widgets.canv_solution.bbox('all'))
+    
+    _resize_frame(None, local_widgets)
     return local_widgets.fr_solution_frame
         
         
@@ -84,6 +76,20 @@ def _create_soln_rects_and_text(widgets:'ui.solution_ui._Widgets',
 
     text = str(widgets.data_problem.grid[problem_row][problem_column])
     text_obj = local_widgets.canv_solution.create_text((x0 + x1)/2, (y0 + y1)/2, 
-                                                   justify='center', font="Arial 10",
+                                                   justify='center', font="Arial 12",
                                                     text=text)
     local_widgets.texts_solution.add(text_obj)
+
+
+def _resize_frame(event, local_widgets:'_LocalWidgets'):
+    canvas = local_widgets.canv_solution
+    frame = local_widgets.fr_solution_frame
+    # Calculate the required width and height based on canvas contents
+    canvas_width = (canvas.bbox("all")[2] - canvas.bbox("all")[0])+10
+    canvas_height = (canvas.bbox("all")[3] - canvas.bbox("all")[1])+10
+    
+    # Set the frame's size based on the calculated dimensions
+    canvas.config(width=canvas_width, height=canvas_height)
+    frame.config(width=canvas_width, height=canvas_height)
+    local_widgets.canv_solution.update_idletasks()
+    
